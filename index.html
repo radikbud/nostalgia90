@@ -32,7 +32,6 @@
             flex-direction: column;
         }
 
-        /* Ambient CRT Scanline Overlay */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -50,7 +49,6 @@
             z-index: 999;
         }
 
-        /* Top Header / Status Bar */
         header {
             background: #181824;
             border-bottom: 3px solid #333;
@@ -63,12 +61,6 @@
             color: var(--amber-glow);
             text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
             z-index: 10;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .header-title span {
@@ -84,7 +76,6 @@
             color: var(--screen-green);
         }
 
-        /* Main Room Canvas Layout */
         .room-container {
             flex: 1;
             position: relative;
@@ -99,7 +90,6 @@
             overflow: hidden;
         }
 
-        /* Wall Posters & Left Rack (Print Media) */
         .left-wall {
             display: flex;
             flex-direction: column;
@@ -196,7 +186,6 @@
             font-family: 'Press Start 2P', cursive;
         }
 
-        /* Center Section: TV Tabung & VCR */
         .center-desk {
             display: flex;
             flex-direction: column;
@@ -269,27 +258,6 @@
             position: relative;
         }
 
-        .tv-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .static-noise {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-radial-gradient(circle at 50% 50%, #fff, #000 2px);
-            opacity: 0.08;
-            pointer-events: none;
-            animation: staticAnim 0.1s infinite;
-        }
-
-        @keyframes staticAnim {
-            0% { transform: translate(0,0); }
-            50% { transform: translate(-1px, 1px); }
-            100% { transform: translate(1px, -1px); }
-        }
-
         .osd-channel {
             position: absolute;
             top: 15px;
@@ -359,7 +327,6 @@
             border-right: 1px solid #333;
         }
 
-        /* VCR Deck Below TV */
         .vcr-deck {
             margin-top: 10px;
             background: #1a1a1a;
@@ -403,7 +370,6 @@
             text-shadow: 0 0 5px #ff0000;
         }
 
-        /* Right Rack: Audio Tape Deck & Walkman */
         .right-wall {
             display: flex;
             flex-direction: column;
@@ -429,12 +395,14 @@
             justify-content: center;
             align-items: center;
             box-shadow: inset 0 0 10px #000;
+            overflow: hidden;
         }
 
         .tape-reels {
             display: flex;
             gap: 40px;
             align-items: center;
+            z-index: 2;
         }
 
         .reel {
@@ -469,6 +437,18 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            z-index: 3;
+        }
+
+        /* Container Player YouTube Tersembunyi untuk Tape Audio */
+        #audio-youtube-player {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .tape-buttons {
@@ -497,7 +477,6 @@
             color: #000;
         }
 
-        /* Modal Overlay for Interactive Reading/Details */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -560,7 +539,6 @@
             white-space: pre-line;
         }
 
-        /* Footer Controls */
         footer {
             background: #111;
             border-top: 2px solid #333;
@@ -590,7 +568,6 @@
             box-shadow: none;
         }
 
-        /* Responsive Adjustments */
         @media (max-width: 900px) {
             .room-container {
                 grid-template-columns: 1fr;
@@ -606,7 +583,6 @@
 <body>
     <div class="scanlines"></div>
     
-    <!-- Header / Status Bar -->
     <header>
         <div class="header-title">
             <span>[MESIN WAKTU '90]</span> KAPSUL POP-CULTURE INDONESIA
@@ -616,9 +592,8 @@
         </div>
     </header>
 
-    <!-- Main Interactive Room Area -->
     <div class="room-container">
-        <!-- Left Column: Wall Poster & Printed Media Rack -->
+        <!-- Kiri: Poster & Rak Bacaan -->
         <div class="left-wall">
             <div class="poster-frame" onclick="openPosterDetail()">
                 <div class="poster-content">
@@ -664,18 +639,18 @@
             </div>
         </div>
 
-        <!-- Center Column: CRT Television & VCR Deck -->
+        <!-- Tengah: TV Tabung & VCR -->
         <div class="center-desk">
             <div class="tv-unit">
                 <div class="tv-brand">POLYTRON 21"</div>
                 <div class="screen-bezel">
                     <div class="crt-screen">
                         <div class="screen-glare"></div>
-                        <div class="static-noise"></div>
                         <div class="osd-channel" id="osd-display">CH-01 [RCTI]</div>
                         
                         <div class="tv-content" id="tv-screen-content">
-                            <!-- YouTube Embed Container -->
+                            <!-- Container YouTube TV -->
+                            <div id="tv-youtube-player"></div>
                         </div>
                     </div>
                 </div>
@@ -701,16 +676,15 @@
                 </div>
             </div>
 
-            <!-- VCR VHS Deck -->
             <div class="vcr-deck">
                 <div class="vcr-slot">
-                    <div class="vcr-slot-door" id="vcr-status">EJECTED / READY</div>
+                    <div class="vcr-slot-door">VHS CASSETTE INSIDE</div>
                 </div>
-                <div class="vcr-display" id="vcr-timer">00:14:28</div>
+                <div class="vcr-display">00:14:28</div>
             </div>
         </div>
 
-        <!-- Right Column: Tape Deck & Music Collection -->
+        <!-- Kanan: Tape Deck & Kaset Pita YouTube Audio -->
         <div class="right-wall">
             <div class="cassette-deck">
                 <div style="font-family:'Press Start 2P', cursive; font-size:9px; color:#aaa; margin-bottom:8px;">COMPOSITION TAPE DECK</div>
@@ -720,6 +694,9 @@
                         <div class="reel" id="right-reel"></div>
                     </div>
                     <div class="tape-label-display" id="tape-title-display">SIDE A: NO TAPE</div>
+                    
+                    <!-- Player YouTube Khusus Suara Kaset -->
+                    <div id="audio-youtube-player"></div>
                 </div>
 
                 <div class="tape-buttons">
@@ -731,36 +708,37 @@
             </div>
 
             <div class="rack-section">
-                <div class="rack-title">KOLEKSI KASET PITA</div>
+                <div class="rack-title">KOLEKSI KASET PITA (YOUTUBE)</div>
                 
-                <div class="media-item" onclick="loadTape('Ramones - Blitzkrieg Bop', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">
+                <!-- ID Video YouTube Lagu-lagu Hits 90-an -->
+                <div class="media-item" onclick="loadTape('Ramones - Blitzkrieg Bop', '268C3N2yA6A')">
                     <div>
                         <strong>Ramones</strong><br>
-                        <small style="font-size:12px; color:#555;">Album: Rocket to Russia</small>
+                        <small style="font-size:12px; color:#555;">Blitzkrieg Bop</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
 
-                <div class="media-item" onclick="loadTape('Sheila On 7 - Dan', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">
+                <div class="media-item" onclick="loadTape('Sheila On 7 - Dan', 'O2S82s2nAtE')">
                     <div>
                         <strong>Sheila On 7</strong><br>
-                        <small style="font-size:12px; color:#555;">Album Pertama (1999)</small>
+                        <small style="font-size:12px; color:#555;">Dan (Album Pertama 1999)</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
 
-                <div class="media-item" onclick="loadTape('Saur Sepuh - Satria Madangkara', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">
+                <div class="media-item" onclick="loadTape('Slank - Kamu Harus Cepat Pulang', 'v6NfU38W7jQ')">
                     <div>
-                        <strong>Saur Sepuh</strong><br>
-                        <small style="font-size:12px; color:#555;">Episode: Satria Madangkara</small>
+                        <strong>Slank</strong><br>
+                        <small style="font-size:12px; color:#555;">Kamu Harus Cepat Pulang</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
 
-                <div class="media-item" onclick="loadTape('Netral - Wa.. Lah!', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')">
+                <div class="media-item" onclick="loadTape('Netral - Wa.. Lah!', '8sXmXk3i_p4')">
                     <div>
                         <strong>Netral</strong><br>
-                        <small style="font-size:12px; color:#555;">Album: Wa.. Lah!</small>
+                        <small style="font-size:12px; color:#555;">Wa.. Lah!</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
@@ -768,13 +746,12 @@
         </div>
     </div>
 
-    <!-- Footer Control & Info -->
     <footer>
-        <div>Klik objek di ruangan untuk memutar siaran, membaca majalah, atau memutar kaset pita.</div>
+        <div>Klik kaset di sebelah kanan lalu klik PLAY untuk mendengarkan lagu YouTube.</div>
         <button class="time-machine-btn" onclick="randomizeTime()">ACAK WAKTU (MESIN WAKTU)</button>
     </footer>
 
-    <!-- Reading / Viewing Modal -->
+    <!-- Modal untuk bacaan -->
     <div class="modal-overlay" id="modal-view">
         <div class="modal-body">
             <button class="modal-close" onclick="closeModal()">X</button>
@@ -788,128 +765,120 @@
         </div>
     </div>
 
+    <!-- YouTube IFrame API Script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // TV Channels Data dengan link YouTube Embed
+        // Data Channel TV YouTube
         const channels = [
-            {
-                name: "CH-01 [RCTI]",
-                title: "DORAEMON",
-                youtubeId: "J2_aW02zD5E"
-            },
-            {
-                name: "CH-02 [SCTV]",
-                title: "SI DOEL ANAK SEKOLAHAN",
-                youtubeId: "L88N5W5Q1L8"
-            },
-            {
-                name: "CH-03 [TPI]",
-                title: "SPONTAN (UHF)",
-                youtubeId: "sJz8A2pZf6U"
-            },
-            {
-                name: "CH-04 [TVRI]",
-                title: "IKLAN 90-AN",
-                youtubeId: "9gX-aJ_x274"
-            },
-            {
-                name: "CH-05 [INDOSIAR]",
-                title: "DRAGON BALL Z",
-                youtubeId: "6a3g7xX38_k"
-            }
+            { name: "CH-01 [RCTI]", title: "DORAEMON", ytId: "J2_aW02zD5E" },
+            { name: "CH-02 [SCTV]", title: "SI DOEL ANAK SEKOLAHAN", ytId: "L88N5W5Q1L8" },
+            { name: "CH-03 [TPI]", title: "SPONTAN (UHF)", ytId: "sJz8A2pZf6U" },
+            { name: "CH-04 [TVRI]", title: "IKLAN 90-AN", ytId: "9gX-aJ_x274" },
+            { name: "CH-05 [INDOSIAR]", title: "DRAGON BALL Z", ytId: "6a3g7xX38_k" }
         ];
 
         let currentChannelIndex = 0;
         let isTvOn = true;
+        let tvPlayer = null;
+        let audioPlayer = null;
 
-        // Audio System State
-        let activeTape = "NO TAPE";
-        let audioElement = null;
+        let selectedTapeTitle = "NO TAPE";
+        let selectedTapeYtId = "";
         let isTapePlaying = false;
 
-        // DOM Elements
         const osdDisplay = document.getElementById('osd-display');
-        const tvScreenContent = document.getElementById('tv-screen-content');
         const channelKnob = document.getElementById('channel-knob');
         const tapeTitleDisplay = document.getElementById('tape-title-display');
         const leftReel = document.getElementById('left-reel');
         const rightReel = document.getElementById('right-reel');
 
-        // Initialize TV Screen
-        function renderTv() {
-            if (!isTvOn) {
-                osdDisplay.style.display = 'none';
-                tvScreenContent.innerHTML = `<div style="color:#333; font-family:'Press Start 2P'; font-size:12px;">[ POWER OFF ]</div>`;
-                return;
-            }
+        // Fungsi Otomatis saat YouTube API SIAP
+        function onYouTubeIframeAPIReady() {
+            // Player TV
+            tvPlayer = new YT.Player('tv-youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: channels[0].ytId,
+                playerVars: { 'autoplay': 1, 'controls': 0, 'rel': 0 },
+                events: {
+                    'onReady': onTvPlayerReady
+                }
+            });
 
-            osdDisplay.style.display = 'block';
-            const ch = channels[currentChannelIndex];
-            osdDisplay.innerText = ch.name;
-
-            // Render Embed YouTube
-            tvScreenContent.innerHTML = `
-                <iframe class="tv-iframe" 
-                    src="https://www.youtube.com/embed/${ch.youtubeId}?autoplay=1&mute=0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
-            `;
+            // Player Kaset Pita (Audio)
+            audioPlayer = new YT.Player('audio-youtube-player', {
+                height: '1',
+                width: '1',
+                videoId: '',
+                playerVars: { 'autoplay': 0, 'controls': 0 }
+            });
         }
 
+        function onTvPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // TV Controls
         function nextChannel() {
             if (!isTvOn) return;
             currentChannelIndex = (currentChannelIndex + 1) % channels.length;
             
-            // Knob rotation animation
             const currentRot = channelKnob.style.transform ? parseInt(channelKnob.style.transform.replace('rotate(', '').replace('deg)', '')) : 0;
             channelKnob.style.transform = `rotate(${currentRot + 45}deg)`;
 
-            // Static flicker effect
-            tvScreenContent.innerHTML = `<div style="color:var(--screen-green); font-size:24px;">MENCARI SIARAN...</div>`;
-            setTimeout(() => {
-                renderTv();
-            }, 300);
+            const ch = channels[currentChannelIndex];
+            osdDisplay.innerText = ch.name;
+
+            if (tvPlayer && tvPlayer.loadVideoById) {
+                tvPlayer.loadVideoById(ch.ytId);
+            }
         }
 
         function toggleTvPower() {
             isTvOn = !isTvOn;
-            renderTv();
+            const container = document.getElementById('tv-screen-content');
+            if (!isTvOn) {
+                osdDisplay.style.display = 'none';
+                if(tvPlayer) tvPlayer.pauseVideo();
+                container.style.opacity = '0.1';
+            } else {
+                osdDisplay.style.display = 'block';
+                if(tvPlayer) tvPlayer.playVideo();
+                container.style.opacity = '1';
+            }
         }
 
-        // Tape Audio Player Mechanics
-        function loadTape(title, audioSrc) {
-            activeTape = title;
+        // Tape Mechanics (YouTube Audio)
+        function loadTape(title, ytId) {
+            selectedTapeTitle = title;
+            selectedTapeYtId = ytId;
             tapeTitleDisplay.innerText = "TAPE: " + title;
             
             pauseAudio();
-
-            // Setup audio baru
-            if (audioElement) {
-                audioElement.pause();
+            if (audioPlayer && audioPlayer.cueVideoById) {
+                audioPlayer.cueVideoById(ytId);
             }
-            audioElement = new Audio(audioSrc);
-            alert("Kaset pita '" + title + "' dimasukkan! Klik tombol PLAY untuk memutar.");
+            alert("Kaset '" + title + "' dimasukkan ke dalam Tape Deck!\nKlik tombol PLAY untuk memutar lagu dari YouTube.");
         }
 
         function playAudio() {
-            if (activeTape.includes("NO TAPE") || !audioElement) {
-                alert("Silakan pilih dan masukkan kaset pita dari rak terlebih dahulu!");
+            if (!selectedTapeYtId) {
+                alert("Silakan pilih kaset pita dari rak kanan lebih dulu!");
                 return;
             }
 
-            audioElement.play().then(() => {
+            if (audioPlayer && audioPlayer.playVideo) {
+                audioPlayer.playVideo();
                 isTapePlaying = true;
                 leftReel.classList.add('playing');
                 rightReel.classList.add('playing');
                 tapeTitleDisplay.style.color = "#33ff33";
-            }).catch(err => {
-                console.log("Audio play error:", err);
-            });
+            }
         }
 
         function pauseAudio() {
-            if (audioElement) {
-                audioElement.pause();
+            if (audioPlayer && audioPlayer.pauseVideo) {
+                audioPlayer.pauseVideo();
             }
             isTapePlaying = false;
             leftReel.classList.remove('playing');
@@ -918,14 +887,20 @@
         }
 
         function rwAudio() {
-            if (audioElement) audioElement.currentTime = Math.max(0, audioElement.currentTime - 10);
+            if (audioPlayer && isTapePlaying) {
+                let curr = audioPlayer.getCurrentTime();
+                audioPlayer.seekTo(Math.max(0, curr - 10), true);
+            }
         }
 
         function ffAudio() {
-            if (audioElement) audioElement.currentTime = Math.min(audioElement.duration, audioElement.currentTime + 10);
+            if (audioPlayer && isTapePlaying) {
+                let curr = audioPlayer.getCurrentTime();
+                audioPlayer.seekTo(curr + 10, true);
+            }
         }
 
-        // Reading Media Modals
+        // Bacaan & Modal Text
         function openMedia(type) {
             const modal = document.getElementById('modal-view');
             const title = document.getElementById('modal-title');
@@ -935,19 +910,19 @@
             if (type === 'hai') {
                 title.innerText = "MAJALAH HAI - EDISI 1997";
                 sub.innerText = "Laporan Utama: Kebangkitan Band Lokal & Musik Punk/Alternative";
-                text.innerText = `DOKUMENTASI ARSIP:\n"Anak-anak muda Jakarta dan Bandung mulai meninggalkan musik pop arus utama. Kaset-kaset pita rilis mandiri (DIY) dari band seperti PAS Band, Netral, dan Pure Saturday habis terjual di distro-distro kecil.\n\nDi ranah global, Ramones baru saja menyelesaikan tur perpisahannya, namun pengaruhnya merasuk kuat ke anak-anak SMA di Jakarta."`;
+                text.innerText = `DOKUMENTASI ARSIP:\n"Anak-anak muda Jakarta dan Bandung mulai meninggalkan musik pop arus utama. Kaset-kaset pita rilis mandiri (DIY) dari band seperti PAS Band, Netral, dan Pure Saturday habis terjual di distro-distro kecil."`;
             } else if (type === 'petruk') {
                 title.innerText = "KOMIK TATANG S. - PETRUK GARENG";
                 sub.innerText = "Judul: TUMBAL SERAM DI DESA TUMARITIS";
-                text.innerText = `[GAMBAR Halaman 1]\nPetruk: "Gareng! Lu jangan jalan sendirian di deket kuburan tua malam Jumat begini! Ada wewe gombel!"\nGareng: "Ah lu Truk, nakut-nakutin aja! Yang penting gue bawa senter baterai ABC!"\n\n(Pesan Moral): SOPAN SANTUN DAN PERILAKU BAIK HARUS TETAP DIJAGA DI MANA PUN ANDA BERADA. TABIK!`;
+                text.innerText = `Petruk: "Gareng! Lu jangan jalan sendirian di deket kuburan tua malam Jumat begini!"\nGareng: "Ah lu Truk, nakut-nakutin aja! Yang penting gue bawa senter baterai ABC!"`;
             } else if (type === 'fantasi') {
                 title.innerText = "TABLOID FANTASI (1998)";
                 sub.innerText = "Panduan Acara TV Minggu Pagi";
-                text.innerText = `JADWAL TV MINGGU PAGI:\n06.00 WIB - Saint Seiya (RCTI)\n07.00 WIB - Doraemon (RCTI)\n08.00 WIB - Dragon Ball Z (Indosiar)\n09.00 WIB - Sailor Moon (Indosiar)\n10.00 WIB - Chibi Maruko-Chan (SCTV)`;
+                text.innerText = `JADWAL TV MINGGU PAGI:\n06.00 WIB - Saint Seiya (RCTI)\n07.00 WIB - Doraemon (RCTI)\n08.00 WIB - Dragon Ball Z (Indosiar)`;
             } else if (type === 'tamiya') {
                 title.innerText = "KATALOG TAMIYA MINI 4WD (1998)";
                 sub.innerText = "Chassis Super-1 & Dinamo Tune-Up";
-                text.innerText = `SERI IKONIK:\n1. Magnum Saber (Go Seiba)\n2. Sonic Saber (Retsu Seiba)\n3. Spin Cobra\n4. Beak Spider\n\nDINAMO REKOMENDASI:\n- Dinamo Kilat (Kuning-Hijau)\n- Pakai Baterai Cas Ni-Cd 1000mAh!`;
+                text.innerText = `SERI IKONIK:\n1. Magnum Saber\n2. Sonic Saber\n3. Spin Cobra`;
             }
             modal.style.display = 'flex';
         }
@@ -956,7 +931,7 @@
             const modal = document.getElementById('modal-view');
             document.getElementById('modal-title').innerText = "POSTER KONSER 1996";
             document.getElementById('modal-sub').innerText = "Memori Dinding Kamar Remaja";
-            document.getElementById('modal-text').innerText = "Poster ini ditempel menggunakan selotip di dinding kamar.\n\nMemuat gambar band Ramones dan Slank saat era album 'Generasi Biru'.";
+            document.getElementById('modal-text').innerText = "Poster konser legendaris Slank & Ramones tahun 1996.";
             modal.style.display = 'flex';
         }
 
@@ -970,9 +945,6 @@
             document.getElementById('clock-display').innerText = `MINGGU, 12 MEI ${randomYear} - 08:30 WIB`;
             alert("Mesin Waktu berpindah ke tahun " + randomYear + "!");
         }
-
-        // Run Initial State
-        renderTv();
     </script>
 </body>
 </html>
