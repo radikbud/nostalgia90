@@ -266,9 +266,13 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            text-align: center;
             position: relative;
+        }
+
+        .tv-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .static-noise {
@@ -294,21 +298,7 @@
             color: var(--screen-green);
             font-size: 14px;
             text-shadow: 0 0 8px var(--screen-green);
-            z-index: 4;
-        }
-
-        .tv-display-title {
-            font-size: 28px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255,255,255,0.8);
-            margin-bottom: 10px;
-        }
-
-        .tv-display-desc {
-            font-size: 18px;
-            color: #aaa;
-            max-width: 80%;
-            line-height: 1.2;
+            z-index: 6;
         }
 
         .tv-controls {
@@ -614,9 +604,8 @@
     </style>
 </head>
 <body>
-
     <div class="scanlines"></div>
-
+    
     <!-- Header / Status Bar -->
     <header>
         <div class="header-title">
@@ -629,7 +618,6 @@
 
     <!-- Main Interactive Room Area -->
     <div class="room-container">
-
         <!-- Left Column: Wall Poster & Printed Media Rack -->
         <div class="left-wall">
             <div class="poster-frame" onclick="openPosterDetail()">
@@ -687,7 +675,7 @@
                         <div class="osd-channel" id="osd-display">CH-01 [RCTI]</div>
                         
                         <div class="tv-content" id="tv-screen-content">
-                            <!-- Dynamically updated via JS -->
+                            <!-- YouTube Embed Container -->
                         </div>
                     </div>
                 </div>
@@ -745,7 +733,7 @@
             <div class="rack-section">
                 <div class="rack-title">KOLEKSI KASET PITA</div>
                 
-                <div class="media-item" onclick="loadTape('Ramones - Rocket to Russia', 'Punk Rock / 1977')">
+                <div class="media-item" onclick="loadTape('Ramones - Blitzkrieg Bop', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">
                     <div>
                         <strong>Ramones</strong><br>
                         <small style="font-size:12px; color:#555;">Album: Rocket to Russia</small>
@@ -753,7 +741,7 @@
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
 
-                <div class="media-item" onclick="loadTape('Sheila On 7 - Self Titled (1999)', 'Pop Rock / 1999')">
+                <div class="media-item" onclick="loadTape('Sheila On 7 - Dan', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">
                     <div>
                         <strong>Sheila On 7</strong><br>
                         <small style="font-size:12px; color:#555;">Album Pertama (1999)</small>
@@ -761,15 +749,15 @@
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
 
-                <div class="media-item" onclick="loadTape('Sandiwara Radio - Saur Sepuh', 'Audio Drama / 1992')">
+                <div class="media-item" onclick="loadTape('Saur Sepuh - Satria Madangkara', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">
                     <div>
                         <strong>Saur Sepuh</strong><br>
-                        <small style="font-size:12px; color:#555;">Episode: Satria dari Madangkara</small>
+                        <small style="font-size:12px; color:#555;">Episode: Satria Madangkara</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">PITA</span>
                 </div>
 
-                <div class="media-item" onclick="loadTape('Netral - Wa.. Lah! (1995)', 'Alternative Rock / 1995')">
+                <div class="media-item" onclick="loadTape('Netral - Wa.. Lah!', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')">
                     <div>
                         <strong>Netral</strong><br>
                         <small style="font-size:12px; color:#555;">Album: Wa.. Lah!</small>
@@ -778,7 +766,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- Footer Control & Info -->
@@ -802,44 +789,42 @@
     </div>
 
     <script>
-        // TV Channels Data
+        // TV Channels Data dengan link YouTube Embed
         const channels = [
             {
                 name: "CH-01 [RCTI]",
                 title: "DORAEMON",
-                desc: "Siaran Minggu Pagi (08:00 WIB)\nSponsor: Biskuit Khong Guan & Susu Dancow",
-                type: "kartun"
+                youtubeId: "J2_aW02zD5E"
             },
             {
                 name: "CH-02 [SCTV]",
                 title: "SI DOEL ANAK SEKOLAHAN",
-                desc: "Episode: Mandra Beli Oplet Baru & Zaenab datang ke kontrakan.",
-                type: "sinetron"
+                youtubeId: "L88N5W5Q1L8"
             },
             {
                 name: "CH-03 [TPI]",
                 title: "SPONTAN (UHF)",
-                desc: "Presenter: Komeng & Ulfa Dwiyanti.\n'Spontan... Uhuy!'",
-                type: "acara"
+                youtubeId: "sJz8A2pZf6U"
             },
             {
                 name: "CH-04 [TVRI]",
-                title: "RIAP-RIAP IKLAN 90-AN",
-                desc: "Kompilasi Iklan: RCTI OK di Sawah, Marjan, Bodrex, & Mie Sedaap Lama.",
-                type: "iklan"
+                title: "IKLAN 90-AN",
+                youtubeId: "9gX-aJ_x274"
             },
             {
                 name: "CH-05 [INDOSIAR]",
                 title: "DRAGON BALL Z",
-                desc: "Pertarungan Son Goku vs Frieza di Planet Namek.",
-                type: "kartun"
+                youtubeId: "6a3g7xX38_k"
             }
         ];
 
         let currentChannelIndex = 0;
         let isTvOn = true;
+
+        // Audio System State
+        let activeTape = "NO TAPE";
+        let audioElement = null;
         let isTapePlaying = false;
-        let activeTape = "Ramones - Rocket to Russia";
 
         // DOM Elements
         const osdDisplay = document.getElementById('osd-display');
@@ -861,9 +846,13 @@
             const ch = channels[currentChannelIndex];
             osdDisplay.innerText = ch.name;
 
+            // Render Embed YouTube
             tvScreenContent.innerHTML = `
-                <div class="tv-display-title">${ch.title}</div>
-                <div class="tv-display-desc">${ch.desc}</div>
+                <iframe class="tv-iframe" 
+                    src="https://www.youtube.com/embed/${ch.youtubeId}?autoplay=1&mute=0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
             `;
         }
 
@@ -888,22 +877,40 @@
         }
 
         // Tape Audio Player Mechanics
-        function loadTape(title, genre) {
+        function loadTape(title, audioSrc) {
             activeTape = title;
             tapeTitleDisplay.innerText = "TAPE: " + title;
+            
             pauseAudio();
-            alert("Kaset pita '" + title + "' dimasukkan ke dalam tape deck!");
+
+            // Setup audio baru
+            if (audioElement) {
+                audioElement.pause();
+            }
+            audioElement = new Audio(audioSrc);
+            alert("Kaset pita '" + title + "' dimasukkan! Klik tombol PLAY untuk memutar.");
         }
 
         function playAudio() {
-            if (activeTape.includes("NO TAPE")) return;
-            isTapePlaying = true;
-            leftReel.classList.add('playing');
-            rightReel.classList.add('playing');
-            tapeTitleDisplay.style.color = "#33ff33";
+            if (activeTape.includes("NO TAPE") || !audioElement) {
+                alert("Silakan pilih dan masukkan kaset pita dari rak terlebih dahulu!");
+                return;
+            }
+
+            audioElement.play().then(() => {
+                isTapePlaying = true;
+                leftReel.classList.add('playing');
+                rightReel.classList.add('playing');
+                tapeTitleDisplay.style.color = "#33ff33";
+            }).catch(err => {
+                console.log("Audio play error:", err);
+            });
         }
 
         function pauseAudio() {
+            if (audioElement) {
+                audioElement.pause();
+            }
             isTapePlaying = false;
             leftReel.classList.remove('playing');
             rightReel.classList.remove('playing');
@@ -911,13 +918,11 @@
         }
 
         function rwAudio() {
-            if (!isTapePlaying) return;
-            alert("Rewinding tape... (Kreeeek-sroooook)");
+            if (audioElement) audioElement.currentTime = Math.max(0, audioElement.currentTime - 10);
         }
 
         function ffAudio() {
-            if (!isTapePlaying) return;
-            alert("Fast forwarding tape...");
+            if (audioElement) audioElement.currentTime = Math.min(audioElement.duration, audioElement.currentTime + 10);
         }
 
         // Reading Media Modals
@@ -930,51 +935,20 @@
             if (type === 'hai') {
                 title.innerText = "MAJALAH HAI - EDISI 1997";
                 sub.innerText = "Laporan Utama: Kebangkitan Band Lokal & Musik Punk/Alternative";
-                text.innerText = `DOKUMENTASI ARSIP:
-                
-"Anak-anak muda Jakarta dan Bandung mulai meninggalkan musik pop arus utama. Kaset-kaset pita rilis mandiri (DIY) dari band seperti PAS Band, Netral, dan Pure Saturday habis terjual di distro-distro kecil. 
-
-Di ranah global, Ramones baru saja menyelesaikan tur perpisahannya, namun pengaruhnya merasuk kuat ke anak-anak SMA di Jakarta yang mulai memakai jaket kulit hitam, celana jins robek, dan sepatu Sneakers kanvas tumpang."`;
+                text.innerText = `DOKUMENTASI ARSIP:\n"Anak-anak muda Jakarta dan Bandung mulai meninggalkan musik pop arus utama. Kaset-kaset pita rilis mandiri (DIY) dari band seperti PAS Band, Netral, dan Pure Saturday habis terjual di distro-distro kecil.\n\nDi ranah global, Ramones baru saja menyelesaikan tur perpisahannya, namun pengaruhnya merasuk kuat ke anak-anak SMA di Jakarta."`;
             } else if (type === 'petruk') {
                 title.innerText = "KOMIK TATANG S. - PETRUK GARENG";
                 sub.innerText = "Judul: TUMBAL SERAM DI DESA TUMARITIS";
-                text.innerText = `[GAMBAR Halaman 1]
-Petruk: "Gareng! Lu jangan jalan sendirian di deket kuburan tua malam Jumat begini! Ada wewe gombel!"
-
-Gareng: "Ah lu Truk, nakut-nakutin aja! Yang penting gue bawa senter baterai ABC!"
-
-Smar: "Ealah anak-anak muda... Daripada keluyuran mending ronda malam di pos ronda sambil ngeronda makan pisang goreng!"
-
-(Pesan Moral di Akhir Halaman):
-SOPAN SANTUN DAN PERILAKU BAIK HARUS TETAP DIJAGA DI MANA PUN ANDA BERADA. TABIK!`;
+                text.innerText = `[GAMBAR Halaman 1]\nPetruk: "Gareng! Lu jangan jalan sendirian di deket kuburan tua malam Jumat begini! Ada wewe gombel!"\nGareng: "Ah lu Truk, nakut-nakutin aja! Yang penting gue bawa senter baterai ABC!"\n\n(Pesan Moral): SOPAN SANTUN DAN PERILAKU BAIK HARUS TETAP DIJAGA DI MANA PUN ANDA BERADA. TABIK!`;
             } else if (type === 'fantasi') {
                 title.innerText = "TABLOID FANTASI (1998)";
                 sub.innerText = "Panduan Acara TV Minggu Pagi";
-                text.innerText = `JADWAL TV MINGGU PAGI:
-
-06.00 WIB - Saint Seiya (RCTI)
-07.00 WIB - Doraemon (RCTI)
-08.00 WIB - Dragon Ball Z (Indosiar)
-09.00 WIB - Sailor Moon (Indosiar)
-10.00 WIB - Chibi Maruko-Chan (SCTV)
-
-Catatan Redaksi:
-Jangan lupa siapkan sarapan bubur ayam atau nasi uduk sebelum menonton kartun kesayanganmu!`;
+                text.innerText = `JADWAL TV MINGGU PAGI:\n06.00 WIB - Saint Seiya (RCTI)\n07.00 WIB - Doraemon (RCTI)\n08.00 WIB - Dragon Ball Z (Indosiar)\n09.00 WIB - Sailor Moon (Indosiar)\n10.00 WIB - Chibi Maruko-Chan (SCTV)`;
             } else if (type === 'tamiya') {
                 title.innerText = "KATALOG TAMIYA MINI 4WD (1998)";
                 sub.innerText = "Chassis Super-1 & Dinamo Tune-Up";
-                text.innerText = `SERI IKONIK:
-1. Magnum Saber (Go Seiba)
-2. Sonic Saber (Retsu Seiba)
-3. Spin Cobra
-4. Beak Spider
-
-DINAMO REKOMENDASI:
-- Dinamo Kilat (Kuning-Hijau) untuk Track Lurus.
-- Dinamo Jabrik/Chita untuk putaran mesin stabil.
-- Pakai Baterai Cas Ni-Cd 1000mAh agar laju mobil melesat di lintasan balap!`;
+                text.innerText = `SERI IKONIK:\n1. Magnum Saber (Go Seiba)\n2. Sonic Saber (Retsu Seiba)\n3. Spin Cobra\n4. Beak Spider\n\nDINAMO REKOMENDASI:\n- Dinamo Kilat (Kuning-Hijau)\n- Pakai Baterai Cas Ni-Cd 1000mAh!`;
             }
-
             modal.style.display = 'flex';
         }
 
@@ -982,7 +956,7 @@ DINAMO REKOMENDASI:
             const modal = document.getElementById('modal-view');
             document.getElementById('modal-title').innerText = "POSTER KONSER 1996";
             document.getElementById('modal-sub').innerText = "Memori Dinding Kamar Remaja";
-            document.getElementById('modal-text').innerText = "Poster ini ditempel menggunakan selotip di dinding kamar.\n\nMemuat gambar band Ramones dan Slank saat era album 'Generasi Biru'. Di bawah poster terdapat coretan tangan tinta pulpen: 'STADION UTAMA - JANGAN LUPAI Beli Kaset Pita Asli!'";
+            document.getElementById('modal-text').innerText = "Poster ini ditempel menggunakan selotip di dinding kamar.\n\nMemuat gambar band Ramones dan Slank saat era album 'Generasi Biru'.";
             modal.style.display = 'flex';
         }
 
@@ -991,17 +965,13 @@ DINAMO REKOMENDASI:
         }
 
         function randomizeTime() {
-            const years = [1992, 1994, 1996, 1998, 1999];
-            const days = ["SENIN", "RABU", "JUMAT", "MINGGU"];
+            const years = [1992, 1995, 1997, 1998, 1999];
             const randomYear = years[Math.floor(Math.random() * years.length)];
-            const randomDay = days[Math.floor(Math.random() * days.length)];
-            
-            document.getElementById('clock-display').innerText = `${randomDay}, 14 OKTOBER ${randomYear} - 16:45 WIB`;
-            nextChannel();
-            alert(`Mesin waktu telah melempar Anda ke tahun ${randomYear}!`);
+            document.getElementById('clock-display').innerText = `MINGGU, 12 MEI ${randomYear} - 08:30 WIB`;
+            alert("Mesin Waktu berpindah ke tahun " + randomYear + "!");
         }
 
-        // Initialize on load
+        // Run Initial State
         renderTv();
     </script>
 </body>
