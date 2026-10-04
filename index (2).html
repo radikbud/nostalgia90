@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesin Waktu '90 - Ruang Nostalgia Indonesia</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f0f18;
+            --crt-glow: #1a2a22;
+            --amber-glow: #ffb000;
+            --screen-green: #33ff33;
+            --tape-plastic: #2a2a2e;
+            --wood-panel: #4a2e1b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #dcdcdc;
+            font-family: 'VT323', monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient CRT Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 3px, 6px 100%;
+            z-index: 999;
+        }
+
+        /* Top Header / Status Bar */
+        header {
+            background: #181824;
+            border-bottom: 3px solid #333;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--amber-glow);
+            text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
+            z-index: 10;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title span {
+            color: #ff3366;
+        }
+
+        .status-badge {
+            background: #000;
+            padding: 4px 8px;
+            border: 1px solid var(--amber-glow);
+            border-radius: 2px;
+            font-size: 10px;
+            color: var(--screen-green);
+        }
+
+        /* Main Room Canvas Layout */
+        .room-container {
+            flex: 1;
+            position: relative;
+            background: 
+                radial-gradient(circle at 50% 40%, #2a2038 0%, #0c0a12 80%),
+                repeating-linear-gradient(45deg, #111 0, #111 10px, #161616 10px, #161616 20px);
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            grid-template-rows: 1fr;
+            gap: 15px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Wall Posters & Left Rack (Print Media) */
+        .left-wall {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .poster-frame {
+            background: #111;
+            border: 4px solid #3a3a3a;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.7);
+            padding: 8px;
+            transform: rotate(-1.5deg);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .poster-frame:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .poster-content {
+            background: #8b0000;
+            height: 120px;
+            border: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            background-image: linear-gradient(135deg, #b22222 25%, #8b0000 25%, #8b0000 50%, #b22222 50%, #b22222 75%, #8b0000 75%, #8b0000 100%);
+            background-size: 20px 20px;
+        }
+
+        .poster-content h4 {
+            font-size: 11px;
+            margin-bottom: 6px;
+            text-shadow: 2px 2px #000;
+            color: #ffeb3b;
+        }
+
+        .poster-content p {
+            font-size: 8px;
+            font-family: 'VT323', monospace;
+            color: #fff;
+        }
+
+        .rack-section {
+            background: var(--wood-panel);
+            border: 4px solid #2a1a0e;
+            box-shadow: inset 0 0 10px #000, 3px 3px 10px rgba(0,0,0,0.5);
+            padding: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rack-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: #d2b48c;
+            border-bottom: 2px dashed #6a422b;
+            padding-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .media-item {
+            background: #d9c5a0;
+            color: #111;
+            padding: 8px;
+            border-left: 5px solid #8b4513;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .media-item:hover {
+            background: #fff;
+            transform: translateX(5px);
+        }
+
+        .media-tag {
+            font-size: 10px;
+            background: #222;
+            color: #fff;
+            padding: 2px 4px;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        /* Center Section: TV Tabung & VCR */
+        .center-desk {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tv-unit {
+            background: #2b2b2b;
+            background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 2px 5px rgba(255,255,255,0.2);
+            width: 100%;
+            max-width: 520px;
+            border: 4px solid #111;
+            position: relative;
+        }
+
+        .tv-brand {
+            position: absolute;
+            top: 6px;
+            left: 30px;
+            font-family: sans-serif;
+            font-weight: bold;
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 2px;
+        }
+
+        .screen-bezel {
+            background: #111;
+            padding: 15px;
+            border-radius: 35px / 25px;
+            box-shadow: inset 0 0 15px #000;
+            position: relative;
+            border: 3px solid #222;
+        }
+
+        .crt-screen {
+            background: #050a05;
+            height: 280px;
+            border-radius: 40px / 30px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #1a2a1a;
+        }
+
+        .screen-glare {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .tv-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .static-noise {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-radial-gradient(circle at 50% 50%, #fff, #000 2px);
+            opacity: 0.08;
+            pointer-events: none;
+            animation: staticAnim 0.1s infinite;
+        }
+
+        @keyframes staticAnim {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(-1px, 1px); }
+            100% { transform: translate(1px, -1px); }
+        }
+
+        .osd-channel {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-family: 'Press Start 2P', cursive;
+            color: var(--screen-green);
+            font-size: 14px;
+            text-shadow: 0 0 8px var(--screen-green);
+            z-index: 4;
+        }
+
+        .tv-display-title {
+            font-size: 28px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+        }
+
+        .tv-display-desc {
+            font-size: 18px;
+            color: #aaa;
+            max-width: 80%;
+            line-height: 1.2;
+        }
+
+        .tv-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+
+        .knob-panel {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .knob {
+            width: 42px;
+            height: 42px;
+            background: radial-gradient(circle, #444 30%, #111 70%);
+            border-radius: 50%;
+            border: 2px solid #555;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.6);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .knob::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 12px;
+            background: #ff3333;
+            border-radius: 2px;
+        }
+
+        .knob-label {
+            font-size: 9px;
+            font-family: 'Press Start 2P', cursive;
+            color: #888;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .speaker-grille {
+            display: flex;
+            gap: 4px;
+        }
+
+        .speaker-slat {
+            width: 4px;
+            height: 30px;
+            background: #111;
+            border-right: 1px solid #333;
+        }
+
+        /* VCR Deck Below TV */
+        .vcr-deck {
+            margin-top: 10px;
+            background: #1a1a1a;
+            border: 3px solid #000;
+            width: 100%;
+            max-width: 520px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vcr-slot {
+            background: #050505;
+            border: 2px solid #333;
+            width: 260px;
+            height: 30px;
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            box-shadow: inset 0 0 5px #000;
+        }
+
+        .vcr-slot-door {
+            color: #444;
+            font-size: 11px;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .vcr-display {
+            font-family: 'VT323', monospace;
+            color: #ff3333;
+            font-size: 20px;
+            background: #100;
+            padding: 2px 8px;
+            border: 1px solid #300;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        /* Right Rack: Audio Tape Deck & Walkman */
+        .right-wall {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cassette-deck {
+            background: #252528;
+            border: 3px solid #111;
+            padding: 12px;
+            border-radius: 5px;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.6);
+        }
+
+        .cassette-window {
+            background: #0a0a0c;
+            border: 2px solid #444;
+            height: 100px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 10px #000;
+        }
+
+        .tape-reels {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .reel {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ccc;
+            border: 4px solid #111;
+            position: relative;
+            animation: spin 3s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .reel.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .tape-label-display {
+            position: absolute;
+            bottom: 6px;
+            font-size: 14px;
+            color: var(--amber-glow);
+            background: rgba(0,0,0,0.8);
+            padding: 2px 8px;
+            border-radius: 2px;
+            width: 80%;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tape-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .tape-btn {
+            background: linear-gradient(180deg, #444, #222);
+            border: 1px solid #000;
+            color: #fff;
+            padding: 8px 0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #000;
+            border-radius: 2px;
+            text-align: center;
+        }
+
+        .tape-btn:active, .tape-btn.active {
+            transform: translateY(3px);
+            box-shadow: none;
+            background: #ffb000;
+            color: #000;
+        }
+
+        /* Modal Overlay for Interactive Reading/Details */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-body {
+            background: #f4ecd8;
+            color: #222;
+            width: 100%;
+            max-width: 650px;
+            max-height: 85vh;
+            border: 8px solid #3a2312;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            padding: 25px;
+            overflow-y: auto;
+            position: relative;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            background: #8b0000;
+            color: #fff;
+            padding: 4px 8px;
+            border: none;
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #222;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            color: #8b0000;
+        }
+
+        .modal-sub {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .modal-content-text {
+            font-size: 16px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        /* Footer Controls */
+        footer {
+            background: #111;
+            border-top: 2px solid #333;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .time-machine-btn {
+            background: #ff3366;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #990026;
+            border-radius: 3px;
+            transition: all 0.1s;
+        }
+
+        .time-machine-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 900px) {
+            .room-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                overflow-y: auto;
+            }
+            body {
+                overflow: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+
+    <!-- Header / Status Bar -->
+    <header>
+        <div class="header-title">
+            <span>[MESIN WAKTU '90]</span> KAPSUL POP-CULTURE INDONESIA
+        </div>
+        <div class="status-badge" id="clock-display">
+            MINGGU, 12 MEI 1996 - 08:30 WIB
+        </div>
+    </header>
+
+    <!-- Main Interactive Room Area -->
+    <div class="room-container">
+
+        <!-- Left Column: Wall Poster & Printed Media Rack -->
+        <div class="left-wall">
+            <div class="poster-frame" onclick="openPosterDetail()">
+                <div class="poster-content">
+                    <h4>POSTER KONSER</h4>
+                    <p>SLANK & RAMONES<br>STADION UTAMA '96</p>
+                </div>
+            </div>
+
+            <div class="rack-section">
+                <div class="rack-title">RAK BACAAN 90-AN</div>
+                
+                <div class="media-item" onclick="openMedia('hai')">
+                    <div>
+                        <strong>Majalah HAI (1997)</strong><br>
+                        <small style="font-size:12px; color:#555;">Edisi Musik Alternatif & Subkultur</small>
+                    </div>
+                    <span class="media-tag">BACA</span>
+                </div>
+
+                <div class="media-item" onclick="openMedia('petruk')">
+                    <div>
+                        <strong>Komik Tatang S.</strong><br>
+                        <small style="font-size:12px; color:#555;">Petruk & Gareng: "TUMBAL SERAM"</small>
+                    </div>
+                    <span class="media-tag">BACA</span>
+                </div>
+
+                <div class="media-item" onclick="openMedia('fantasi')">
+                    <div>
+                        <strong>Tabloid Fantasi</strong><br>
+                        <small style="font-size:12px; color:#555;">Jadwal Kartun & Anime Minggu Pagi</small>
+                    </div>
+                    <span class="media-tag">BACA</span>
+                </div>
+
+                <div class="media-item" onclick="openMedia('tamiya')">
+                    <div>
+                        <strong>Katalog Tamiya '98</strong><br>
+                        <small style="font-size:12px; color:#555;">Dash! Yonkuro & Mini 4WD</small>
+                    </div>
+                    <span class="media-tag">LIHAT</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Column: CRT Television & VCR Deck -->
+        <div class="center-desk">
+            <div class="tv-unit">
+                <div class="tv-brand">POLYTRON 21"</div>
+                <div class="screen-bezel">
+                    <div class="crt-screen">
+                        <div class="screen-glare"></div>
+                        <div class="static-noise"></div>
+                        <div class="osd-channel" id="osd-display">CH-01 [RCTI]</div>
+                        
+                        <div class="tv-content" id="tv-screen-content">
+                            <!-- Dynamically updated via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tv-controls">
+                    <div class="speaker-grille">
+                        <div class="speaker-slat"></div>
+                        <div class="speaker-slat"></div>
+                        <div class="speaker-slat"></div>
+                        <div class="speaker-slat"></div>
+                    </div>
+
+                    <div class="knob-panel">
+                        <div>
+                            <div class="knob" id="channel-knob" onclick="nextChannel()"></div>
+                            <div class="knob-label">CH</div>
+                        </div>
+                        <div>
+                            <div class="knob" id="power-knob" onclick="toggleTvPower()"></div>
+                            <div class="knob-label">POWER</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VCR VHS Deck -->
+            <div class="vcr-deck">
+                <div class="vcr-slot">
+                    <div class="vcr-slot-door" id="vcr-status">EJECTED / READY</div>
+                </div>
+                <div class="vcr-display" id="vcr-timer">00:14:28</div>
+            </div>
+        </div>
+
+        <!-- Right Column: Tape Deck & Music Collection -->
+        <div class="right-wall">
+            <div class="cassette-deck">
+                <div style="font-family:'Press Start 2P', cursive; font-size:9px; color:#aaa; margin-bottom:8px;">COMPOSITION TAPE DECK</div>
+                <div class="cassette-window">
+                    <div class="tape-reels">
+                        <div class="reel" id="left-reel"></div>
+                        <div class="reel" id="right-reel"></div>
+                    </div>
+                    <div class="tape-label-display" id="tape-title-display">SIDE A: NO TAPE</div>
+                </div>
+
+                <div class="tape-buttons">
+                    <button class="tape-btn" onclick="playAudio()">PLAY</button>
+                    <button class="tape-btn" onclick="pauseAudio()">STOP</button>
+                    <button class="tape-btn" onclick="rwAudio()">REW</button>
+                    <button class="tape-btn" onclick="ffAudio()">FFWD</button>
+                </div>
+            </div>
+
+            <div class="rack-section">
+                <div class="rack-title">KOLEKSI KASET PITA</div>
+                
+                <div class="media-item" onclick="loadTape('Ramones - Rocket to Russia', 'Punk Rock / 1977')">
+                    <div>
+                        <strong>Ramones</strong><br>
+                        <small style="font-size:12px; color:#555;">Album: Rocket to Russia</small>
+                    </div>
+                    <span class="media-tag" style="background:#b22222;">PITA</span>
+                </div>
+
+                <div class="media-item" onclick="loadTape('Sheila On 7 - Self Titled (1999)', 'Pop Rock / 1999')">
+                    <div>
+                        <strong>Sheila On 7</strong><br>
+                        <small style="font-size:12px; color:#555;">Album Pertama (1999)</small>
+                    </div>
+                    <span class="media-tag" style="background:#b22222;">PITA</span>
+                </div>
+
+                <div class="media-item" onclick="loadTape('Sandiwara Radio - Saur Sepuh', 'Audio Drama / 1992')">
+                    <div>
+                        <strong>Saur Sepuh</strong><br>
+                        <small style="font-size:12px; color:#555;">Episode: Satria dari Madangkara</small>
+                    </div>
+                    <span class="media-tag" style="background:#b22222;">PITA</span>
+                </div>
+
+                <div class="media-item" onclick="loadTape('Netral - Wa.. Lah! (1995)', 'Alternative Rock / 1995')">
+                    <div>
+                        <strong>Netral</strong><br>
+                        <small style="font-size:12px; color:#555;">Album: Wa.. Lah!</small>
+                    </div>
+                    <span class="media-tag" style="background:#b22222;">PITA</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Control & Info -->
+    <footer>
+        <div>Klik objek di ruangan untuk memutar siaran, membaca majalah, atau memutar kaset pita.</div>
+        <button class="time-machine-btn" onclick="randomizeTime()">ACAK WAKTU (MESIN WAKTU)</button>
+    </footer>
+
+    <!-- Reading / Viewing Modal -->
+    <div class="modal-overlay" id="modal-view">
+        <div class="modal-body">
+            <button class="modal-close" onclick="closeModal()">X</button>
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">TITLE</div>
+                <div class="modal-sub" id="modal-sub">SUBTITLE</div>
+            </div>
+            <div class="modal-content-text" id="modal-text">
+                CONTENT
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TV Channels Data
+        const channels = [
+            {
+                name: "CH-01 [RCTI]",
+                title: "DORAEMON",
+                desc: "Siaran Minggu Pagi (08:00 WIB)\nSponsor: Biskuit Khong Guan & Susu Dancow",
+                type: "kartun"
+            },
+            {
+                name: "CH-02 [SCTV]",
+                title: "SI DOEL ANAK SEKOLAHAN",
+                desc: "Episode: Mandra Beli Oplet Baru & Zaenab datang ke kontrakan.",
+                type: "sinetron"
+            },
+            {
+                name: "CH-03 [TPI]",
+                title: "SPONTAN (UHF)",
+                desc: "Presenter: Komeng & Ulfa Dwiyanti.\n'Spontan... Uhuy!'",
+                type: "acara"
+            },
+            {
+                name: "CH-04 [TVRI]",
+                title: "RIAP-RIAP IKLAN 90-AN",
+                desc: "Kompilasi Iklan: RCTI OK di Sawah, Marjan, Bodrex, & Mie Sedaap Lama.",
+                type: "iklan"
+            },
+            {
+                name: "CH-05 [INDOSIAR]",
+                title: "DRAGON BALL Z",
+                desc: "Pertarungan Son Goku vs Frieza di Planet Namek.",
+                type: "kartun"
+            }
+        ];
+
+        let currentChannelIndex = 0;
+        let isTvOn = true;
+        let isTapePlaying = false;
+        let activeTape = "Ramones - Rocket to Russia";
+
+        // DOM Elements
+        const osdDisplay = document.getElementById('osd-display');
+        const tvScreenContent = document.getElementById('tv-screen-content');
+        const channelKnob = document.getElementById('channel-knob');
+        const tapeTitleDisplay = document.getElementById('tape-title-display');
+        const leftReel = document.getElementById('left-reel');
+        const rightReel = document.getElementById('right-reel');
+
+        // Initialize TV Screen
+        function renderTv() {
+            if (!isTvOn) {
+                osdDisplay.style.display = 'none';
+                tvScreenContent.innerHTML = `<div style="color:#333; font-family:'Press Start 2P'; font-size:12px;">[ POWER OFF ]</div>`;
+                return;
+            }
+
+            osdDisplay.style.display = 'block';
+            const ch = channels[currentChannelIndex];
+            osdDisplay.innerText = ch.name;
+
+            tvScreenContent.innerHTML = `
+                <div class="tv-display-title">${ch.title}</div>
+                <div class="tv-display-desc">${ch.desc}</div>
+            `;
+        }
+
+        function nextChannel() {
+            if (!isTvOn) return;
+            currentChannelIndex = (currentChannelIndex + 1) % channels.length;
+            
+            // Knob rotation animation
+            const currentRot = channelKnob.style.transform ? parseInt(channelKnob.style.transform.replace('rotate(', '').replace('deg)', '')) : 0;
+            channelKnob.style.transform = `rotate(${currentRot + 45}deg)`;
+
+            // Static flicker effect
+            tvScreenContent.innerHTML = `<div style="color:var(--screen-green); font-size:24px;">MENCARI SIARAN...</div>`;
+            setTimeout(() => {
+                renderTv();
+            }, 300);
+        }
+
+        function toggleTvPower() {
+            isTvOn = !isTvOn;
+            renderTv();
+        }
+
+        // Tape Audio Player Mechanics
+        function loadTape(title, genre) {
+            activeTape = title;
+            tapeTitleDisplay.innerText = "TAPE: " + title;
+            pauseAudio();
+            alert("Kaset pita '" + title + "' dimasukkan ke dalam tape deck!");
+        }
+
+        function playAudio() {
+            if (activeTape.includes("NO TAPE")) return;
+            isTapePlaying = true;
+            leftReel.classList.add('playing');
+            rightReel.classList.add('playing');
+            tapeTitleDisplay.style.color = "#33ff33";
+        }
+
+        function pauseAudio() {
+            isTapePlaying = false;
+            leftReel.classList.remove('playing');
+            rightReel.classList.remove('playing');
+            tapeTitleDisplay.style.color = "var(--amber-glow)";
+        }
+
+        function rwAudio() {
+            if (!isTapePlaying) return;
+            alert("Rewinding tape... (Kreeeek-sroooook)");
+        }
+
+        function ffAudio() {
+            if (!isTapePlaying) return;
+            alert("Fast forwarding tape...");
+        }
+
+        // Reading Media Modals
+        function openMedia(type) {
+            const modal = document.getElementById('modal-view');
+            const title = document.getElementById('modal-title');
+            const sub = document.getElementById('modal-sub');
+            const text = document.getElementById('modal-text');
+
+            if (type === 'hai') {
+                title.innerText = "MAJALAH HAI - EDISI 1997";
+                sub.innerText = "Laporan Utama: Kebangkitan Band Lokal & Musik Punk/Alternative";
+                text.innerText = `DOKUMENTASI ARSIP:
+                
+"Anak-anak muda Jakarta dan Bandung mulai meninggalkan musik pop arus utama. Kaset-kaset pita rilis mandiri (DIY) dari band seperti PAS Band, Netral, dan Pure Saturday habis terjual di distro-distro kecil. 
+
+Di ranah global, Ramones baru saja menyelesaikan tur perpisahannya, namun pengaruhnya merasuk kuat ke anak-anak SMA di Jakarta yang mulai memakai jaket kulit hitam, celana jins robek, dan sepatu Sneakers kanvas tumpang."`;
+            } else if (type === 'petruk') {
+                title.innerText = "KOMIK TATANG S. - PETRUK GARENG";
+                sub.innerText = "Judul: TUMBAL SERAM DI DESA TUMARITIS";
+                text.innerText = `[GAMBAR Halaman 1]
+Petruk: "Gareng! Lu jangan jalan sendirian di deket kuburan tua malam Jumat begini! Ada wewe gombel!"
+
+Gareng: "Ah lu Truk, nakut-nakutin aja! Yang penting gue bawa senter baterai ABC!"
+
+Smar: "Ealah anak-anak muda... Daripada keluyuran mending ronda malam di pos ronda sambil ngeronda makan pisang goreng!"
+
+(Pesan Moral di Akhir Halaman):
+SOPAN SANTUN DAN PERILAKU BAIK HARUS TETAP DIJAGA DI MANA PUN ANDA BERADA. TABIK!`;
+            } else if (type === 'fantasi') {
+                title.innerText = "TABLOID FANTASI (1998)";
+                sub.innerText = "Panduan Acara TV Minggu Pagi";
+                text.innerText = `JADWAL TV MINGGU PAGI:
+
+06.00 WIB - Saint Seiya (RCTI)
+07.00 WIB - Doraemon (RCTI)
+08.00 WIB - Dragon Ball Z (Indosiar)
+09.00 WIB - Sailor Moon (Indosiar)
+10.00 WIB - Chibi Maruko-Chan (SCTV)
+
+Catatan Redaksi:
+Jangan lupa siapkan sarapan bubur ayam atau nasi uduk sebelum menonton kartun kesayanganmu!`;
+            } else if (type === 'tamiya') {
+                title.innerText = "KATALOG TAMIYA MINI 4WD (1998)";
+                sub.innerText = "Chassis Super-1 & Dinamo Tune-Up";
+                text.innerText = `SERI IKONIK:
+1. Magnum Saber (Go Seiba)
+2. Sonic Saber (Retsu Seiba)
+3. Spin Cobra
+4. Beak Spider
+
+DINAMO REKOMENDASI:
+- Dinamo Kilat (Kuning-Hijau) untuk Track Lurus.
+- Dinamo Jabrik/Chita untuk putaran mesin stabil.
+- Pakai Baterai Cas Ni-Cd 1000mAh agar laju mobil melesat di lintasan balap!`;
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function openPosterDetail() {
+            const modal = document.getElementById('modal-view');
+            document.getElementById('modal-title').innerText = "POSTER KONSER 1996";
+            document.getElementById('modal-sub').innerText = "Memori Dinding Kamar Remaja";
+            document.getElementById('modal-text').innerText = "Poster ini ditempel menggunakan selotip di dinding kamar.\n\nMemuat gambar band Ramones dan Slank saat era album 'Generasi Biru'. Di bawah poster terdapat coretan tangan tinta pulpen: 'STADION UTAMA - JANGAN LUPAI Beli Kaset Pita Asli!'";
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-view').style.display = 'none';
+        }
+
+        function randomizeTime() {
+            const years = [1992, 1994, 1996, 1998, 1999];
+            const days = ["SENIN", "RABU", "JUMAT", "MINGGU"];
+            const randomYear = years[Math.floor(Math.random() * years.length)];
+            const randomDay = days[Math.floor(Math.random() * days.length)];
+            
+            document.getElementById('clock-display').innerText = `${randomDay}, 14 OKTOBER ${randomYear} - 16:45 WIB`;
+            nextChannel();
+            alert(`Mesin waktu telah melempar Anda ke tahun ${randomYear}!`);
+        }
+
+        // Initialize on load
+        renderTv();
+    </script>
+</body>
+</html>
