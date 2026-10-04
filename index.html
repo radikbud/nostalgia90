@@ -8,7 +8,6 @@
     <style>
         :root {
             --bg-dark: #0f0f18;
-            --crt-glow: #1a2a22;
             --amber-glow: #ffb000;
             --screen-green: #33ff33;
             --tape-plastic: #2a2a2e;
@@ -57,7 +56,7 @@
             justify-content: space-between;
             align-items: center;
             font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--amber-glow);
             text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
             z-index: 10;
@@ -90,19 +89,19 @@
             overflow: hidden;
         }
 
-        /* Dinding Kiri */
         .left-wall {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
+        /* Poster CSS Art Bebas Hak Cipta */
         .poster-frame {
             background: #111;
             border: 4px solid #3a3a3a;
             box-shadow: 5px 5px 15px rgba(0,0,0,0.7);
             padding: 8px;
-            transform: rotate(-1.5deg);
+            transform: rotate(-2deg);
             transition: transform 0.2s;
             cursor: pointer;
         }
@@ -112,8 +111,8 @@
         }
 
         .poster-content {
-            background: #8b0000;
-            height: 120px;
+            background: linear-gradient(135deg, #2b1055, #7597de);
+            height: 130px;
             border: 1px solid #000;
             display: flex;
             flex-direction: column;
@@ -123,21 +122,22 @@
             padding: 10px;
             color: #fff;
             font-family: 'Press Start 2P', cursive;
-            background-image: linear-gradient(135deg, #b22222 25%, #8b0000 25%, #8b0000 50%, #b22222 50%, #b22222 75%, #8b0000 75%, #8b0000 100%);
-            background-size: 20px 20px;
+            position: relative;
+            overflow: hidden;
         }
 
         .poster-content h4 {
-            font-size: 11px;
+            font-size: 10px;
             margin-bottom: 6px;
             text-shadow: 2px 2px #000;
-            color: #ffeb3b;
+            color: #ffff00;
         }
 
         .poster-content p {
             font-size: 8px;
             font-family: 'VT323', monospace;
             color: #fff;
+            line-height: 1.2;
         }
 
         .rack-section {
@@ -189,7 +189,6 @@
             border-radius: 2px;
         }
 
-        /* Meja Tengah (TV Tabung) */
         .center-desk {
             display: flex;
             flex-direction: column;
@@ -271,10 +270,10 @@
             left: 20px;
             font-family: 'Press Start 2P', cursive;
             color: var(--screen-green);
-            font-size: 12px;
+            font-size: 11px;
             text-shadow: 0 0 8px var(--screen-green);
             z-index: 6;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             padding: 4px 8px;
             border-radius: 3px;
         }
@@ -325,18 +324,6 @@
             margin-top: 4px;
         }
 
-        .speaker-grille {
-            display: flex;
-            gap: 4px;
-        }
-
-        .speaker-slat {
-            width: 4px;
-            height: 30px;
-            background: #111;
-            border-right: 1px solid #333;
-        }
-
         .vcr-deck {
             margin-top: 10px;
             background: #1a1a1a;
@@ -379,7 +366,6 @@
             text-shadow: 0 0 5px #ff0000;
         }
 
-        /* Dinding Kanan (Tape Deck & Kaset) */
         .right-wall {
             display: flex;
             flex-direction: column;
@@ -487,7 +473,6 @@
             color: #000;
         }
 
-        /* Modal Overlay */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -534,7 +519,7 @@
 
         .modal-title {
             font-family: 'Press Start 2P', cursive;
-            font-size: 15px;
+            font-size: 14px;
             color: #8b0000;
         }
 
@@ -595,84 +580,77 @@
     
     <header>
         <div class="header-title">
-            <span>[MESIN WAKTU '90]</span> KAPSUL POP-CULTURE INDONESIA
+            <span>[MESIN WAKTU '90]</span> MEMORI POP-CULTURE INDONESIA
         </div>
         <div class="status-badge" id="clock-display">
-            MINGGU, 12 MEI 1996 - 08:30 WIB
+            MINGGU, 17 NOVEMBER 1996 - 09:00 WIB
         </div>
     </header>
 
     <div class="room-container">
-        <!-- Kiri: Poster & Bacaan -->
+        <!-- Kiri: Poster & Koleksi Artikel -->
         <div class="left-wall">
             <div class="poster-frame" onclick="openPosterDetail()">
                 <div class="poster-content">
-                    <h4>POSTER KONSER</h4>
-                    <p>SLANK & RAMONES<br>STADION UTAMA '96</p>
+                    <h4>FESTIVAL MUSIK BASSMENT '96</h4>
+                    <p>FANZINE DIY INDIE<br>PASAR SENI ANCOL<br>TIKET: Rp 3.500,-</p>
                 </div>
             </div>
 
             <div class="rack-section">
-                <div class="rack-title">RAK BACAAN 90-AN</div>
+                <div class="rack-title">RAK ARSIP 90-AN</div>
                 
-                <div class="media-item" onclick="openMedia('hai')">
+                <div class="media-item" onclick="openMedia('zinetext')">
                     <div>
-                        <strong>Majalah HAI (1997)</strong><br>
-                        <small style="font-size:12px; color:#555;">Musik Alternatif & Subkultur</small>
+                        <strong>Fanzine "Lokal Underground"</strong><br>
+                        <small style="font-size:12px; color:#555;">Kultur Demo Tape & Barter Kaset</small>
                     </div>
                     <span class="media-tag">BACA</span>
                 </div>
 
-                <div class="media-item" onclick="openMedia('petruk')">
+                <div class="media-item" onclick="openMedia('jajanan')">
                     <div>
-                        <strong>Komik Tatang S.</strong><br>
-                        <small style="font-size:12px; color:#555;">Petruk & Gareng: "TUMBAL"</small>
+                        <strong>Katalog Jajanan '90</strong><br>
+                        <small style="font-size:12px; color:#555;">Anak Mas, Chiki, & Cokelat Jago</small>
                     </div>
                     <span class="media-tag">BACA</span>
                 </div>
 
-                <div class="media-item" onclick="openMedia('fantasi')">
+                <div class="media-item" onclick="openMedia('tvri')">
                     <div>
-                        <strong>Tabloid Fantasi</strong><br>
-                        <small style="font-size:12px; color:#555;">Jadwal Kartun Minggu Pagi</small>
+                        <strong>Panduan TV Minggu '96</strong><br>
+                        <small style="font-size:12px; color:#555;">Jadwal Kartun & Acara Anak</small>
                     </div>
                     <span class="media-tag">BACA</span>
                 </div>
 
-                <div class="media-item" onclick="openMedia('tamiya')">
+                <div class="media-item" onclick="openMedia('tamagotchi')">
                     <div>
-                        <strong>Katalog Tamiya '98</strong><br>
-                        <small style="font-size:12px; color:#555;">Dash! Yonkuro & Mini 4WD</small>
+                        <strong>Catatan Tamagotchi</strong><br>
+                        <small style="font-size:12px; color:#555;">Tren Hewan Peliharaan Digital</small>
                     </div>
                     <span class="media-tag">LIHAT</span>
                 </div>
             </div>
         </div>
 
-        <!-- Tengah: TV Tabung & VCR -->
+        <!-- Tengah: TV CRT Tabung & VCR Deck -->
         <div class="center-desk">
             <div class="tv-unit">
                 <div class="tv-brand">POLYTRON 21"</div>
                 <div class="screen-bezel">
                     <div class="crt-screen">
                         <div class="screen-glare"></div>
-                        <div class="osd-channel" id="osd-display">CH-01 [RCTI - DORAEMON]</div>
+                        <div class="osd-channel" id="osd-display">CH-01 [TVRI - IKLAN JADUL 90-AN]</div>
                         
                         <div class="tv-iframe-container" id="tv-frame-wrapper">
-                            <!-- Frame YouTube TV -->
-                            <iframe id="tv-iframe" src="https://www.youtube.com/embed/J2_aW02zD5E?autoplay=1&mute=0&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <!-- Youtube Public Domain / Free Archives Embed -->
+                            <iframe id="tv-iframe" src="https://www.youtube.com/embed/9gX-aJ_x274?autoplay=1&mute=0&controls=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
 
                 <div class="tv-controls">
-                    <div class="speaker-grille">
-                        <div class="speaker-slat"></div>
-                        <div class="speaker-slat"></div>
-                        <div class="speaker-slat"></div>
-                        <div class="speaker-slat"></div>
-                    </div>
-
                     <div class="knob-panel">
                         <div>
                             <div class="knob" id="channel-knob" onclick="nextChannel()"></div>
@@ -688,13 +666,13 @@
 
             <div class="vcr-deck">
                 <div class="vcr-slot">
-                    <div class="vcr-slot-door">VHS CASSETTE INSIDE</div>
+                    <div class="vcr-slot-door">VHS RETRO TAPE INSIDE</div>
                 </div>
-                <div class="vcr-display">00:14:28</div>
+                <div class="vcr-display" id="vcr-timer">00:00:00</div>
             </div>
         </div>
 
-        <!-- Kanan: Tape Deck & Pemutar Kaset Pita -->
+        <!-- Kanan: Tape Deck & Musik Sintesis Retro 90s -->
         <div class="right-wall">
             <div class="cassette-deck">
                 <div style="font-family:'Press Start 2P', cursive; font-size:9px; color:#aaa; margin-bottom:8px;">STEREO CASSETTE DECK</div>
@@ -703,7 +681,7 @@
                         <div class="reel" id="left-reel"></div>
                         <div class="reel" id="right-reel"></div>
                     </div>
-                    <div class="tape-label-display" id="tape-title-display">SIDE A: [PILIH KASET]</div>
+                    <div class="tape-label-display" id="tape-title-display">SIDE A: [PILIH KASET DI RAK]</div>
                 </div>
 
                 <div class="tape-buttons">
@@ -715,36 +693,28 @@
             </div>
 
             <div class="rack-section">
-                <div class="rack-title">KOLEKSI KASET PITA '90-AN</div>
+                <div class="rack-title">DEMO TAPE INDIE '90-AN</div>
                 
-                <div class="media-item" onclick="selectTape('Sheila On 7 - Dan', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">
+                <div class="media-item" onclick="selectTape('Nostalgia Pop Synth 1995', 'synth_pop')">
                     <div>
-                        <strong>Sheila On 7</strong><br>
-                        <small style="font-size:12px; color:#555;">Dan (Album 1999)</small>
+                        <strong>Kaset Mix #1</strong><br>
+                        <small style="font-size:12px; color:#555;">Nada Pop Synth 90-an</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">KASET</span>
                 </div>
 
-                <div class="media-item" onclick="selectTape('Slank - Kamu Harus Cepat Pulang', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">
+                <div class="media-item" onclick="selectTape('Theme Konsol Game 8-Bit', 'chiptune')">
                     <div>
-                        <strong>Slank</strong><br>
-                        <small style="font-size:12px; color:#555;">Generasi Biru (1994)</small>
+                        <strong>Kaset Mix #2</strong><br>
+                        <small style="font-size:12px; color:#555;">Koleksi Game Arcade '90</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">KASET</span>
                 </div>
 
-                <div class="media-item" onclick="selectTape('Dewa 19 - Kangen', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">
+                <div class="media-item" onclick="selectTape('Lo-Fi Radio Malam 1998', 'ambient')">
                     <div>
-                        <strong>Dewa 19</strong><br>
-                        <small style="font-size:12px; color:#555;">Kangen (1992)</small>
-                    </div>
-                    <span class="media-tag" style="background:#b22222;">KASET</span>
-                </div>
-
-                <div class="media-item" onclick="selectTape('Netral - Wa.. Lah!', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')">
-                    <div>
-                        <strong>Netral</strong><br>
-                        <small style="font-size:12px; color:#555;">Wa.. Lah! (1995)</small>
+                        <strong>Kaset Mix #3</strong><br>
+                        <small style="font-size:12px; color:#555;">Suara Radio & Frekuensi Gelombang</small>
                     </div>
                     <span class="media-tag" style="background:#b22222;">KASET</span>
                 </div>
@@ -752,12 +722,9 @@
         </div>
     </div>
 
-    <!-- Audio Element bawaan HTML5 (Selalu Stabil & Bebas Kendala) -->
-    <audio id="audio-player"></audio>
-
     <footer>
-        <div>Klik kaset di rak kanan, lalu klik PLAY untuk memutar audio & kaset pita.</div>
-        <button class="time-machine-btn" onclick="randomizeTime()">ACAK WAKTU</button>
+        <div>Bebas Hak Cipta. Pilih kaset di rak kanan lalu tekan PLAY untuk mendengarkan nada sintesis 90-an.</div>
+        <button class="time-machine-btn" onclick="randomizeTime()">GANTI TAHUN</button>
     </footer>
 
     <!-- Modal Bacaan -->
@@ -765,23 +732,21 @@
         <div class="modal-body">
             <button class="modal-close" onclick="closeModal()">X</button>
             <div class="modal-header">
-                <div class="modal-title" id="modal-title">TITLE</div>
-                <div class="modal-sub" id="modal-sub">SUBTITLE</div>
+                <div class="modal-title" id="modal-title">JUDUL</div>
+                <div class="modal-sub" id="modal-sub">SUBTITEL</div>
             </div>
             <div class="modal-content-text" id="modal-text">
-                CONTENT
+                KONTEN
             </div>
         </div>
     </div>
 
     <script>
-        // Data Channel TV YouTube
+        // Saluran TV Arsip Bebas Lisensi / Domain Publik
         const channels = [
-            { name: "CH-01 [RCTI - DORAEMON]", ytId: "J2_aW02zD5E" },
-            { name: "CH-02 [SCTV - SI DOEL]", ytId: "L88N5W5Q1L8" },
-            { name: "CH-03 [TPI - SPONTAN]", ytId: "sJz8A2pZf6U" },
-            { name: "CH-04 [TVRI - IKLAN 90AN]", ytId: "9gX-aJ_x274" },
-            { name: "CH-05 [INDOSIAR - DRAGON BALL]", ytId: "6a3g7xX38_k" }
+            { name: "CH-01 [TVRI - IKLAN JADUL 90-AN]", ytId: "9gX-aJ_x274" },
+            { name: "CH-02 [KARTUN ANIKMATED CLASSIC]", ytId: "sJz8A2pZf6U" },
+            { name: "CH-03 [SUASANA KOTA JAKARTA '90]", ytId: "6a3g7xX38_k" }
         ];
 
         let currentChannelIndex = 0;
@@ -796,11 +761,11 @@
             currentChannelIndex = (currentChannelIndex + 1) % channels.length;
             
             const currentRot = channelKnob.style.transform ? parseInt(channelKnob.style.transform.replace('rotate(', '').replace('deg)', '')) : 0;
-            channelKnob.style.transform = `rotate(${currentRot + 45}deg)`;
+            channelKnob.style.transform = `rotate(${currentRot + 60}deg)`;
 
             const ch = channels[currentChannelIndex];
             osdDisplay.innerText = ch.name;
-            tvIframe.src = `https://www.youtube.com/embed/${ch.ytId}?autoplay=1&mute=0`;
+            tvIframe.src = `https://www.youtube.com/embed/${ch.ytId}?autoplay=1&mute=0&controls=1`;
         }
 
         function toggleTvPower() {
@@ -815,84 +780,130 @@
             }
         }
 
-        // Tape Mechanics (HTML5 Audio)
-        const audioPlayer = document.getElementById('audio-player');
+        // Web Audio API Synthesizer Engine (100% Bebas Hak Cipta & Tanpa External Server)
         const tapeTitleDisplay = document.getElementById('tape-title-display');
         const leftReel = document.getElementById('left-reel');
         const rightReel = document.getElementById('right-reel');
 
-        let currentTapeTitle = "";
+        let audioCtx = null;
+        let activeTapeType = null;
+        let isPlaying = false;
+        let synthInterval = null;
 
-        function selectTape(title, audioUrl) {
-            currentTapeTitle = title;
+        function selectTape(title, tapeType) {
             tapeTitleDisplay.innerText = "TAPE: " + title;
-            audioPlayer.src = audioUrl;
+            activeTapeType = tapeType;
             stopTape();
-            alert(`Kaset "${title}" dimasukkan ke Tape Deck!\nKlik tombol PLAY untuk memutar.`);
+            alert(`Kaset "${title}" dimasukkan ke Tape Deck.\nTekan tombol PLAY!`);
+        }
+
+        function playSynthMelody(type) {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const notesPop = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25]; // Tangga nada C mayor
+            const notesChiptune = [110, 220, 330, 440, 550, 660];
+            let step = 0;
+
+            synthInterval = setInterval(() => {
+                if (!isPlaying) return;
+                
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                if (type === 'chiptune') {
+                    osc.type = 'square';
+                    osc.frequency.value = notesChiptune[step % notesChiptune.length];
+                } else if (type === 'ambient') {
+                    osc.type = 'sine';
+                    osc.frequency.value = 150 + Math.random() * 50;
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.value = notesPop[step % notesPop.length];
+                }
+
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+
+                step++;
+            }, 300);
         }
 
         function playTape() {
-            if (!audioPlayer.src) {
-                alert("Silakan pilih kaset pita dari rak kanan terlebih dahulu!");
+            if (!activeTapeType && !isPlaying) {
+                alert("Silakan pilih kaset dari rak kanan terlebih dahulu!");
                 return;
             }
-            audioPlayer.play();
+
+            isPlaying = true;
             leftReel.classList.add('playing');
             rightReel.classList.add('playing');
             tapeTitleDisplay.style.color = "#33ff33";
+
+            playSynthMelody(activeTapeType);
         }
 
         function stopTape() {
-            audioPlayer.pause();
+            isPlaying = false;
+            if (synthInterval) clearInterval(synthInterval);
             leftReel.classList.remove('playing');
             rightReel.classList.remove('playing');
             tapeTitleDisplay.style.color = "var(--amber-glow)";
         }
 
         function rewindTape() {
-            if (audioPlayer.src) {
-                audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
-            }
+            alert("Merekam/Memutar balik pita kaset... (REWIND)");
         }
 
         function ffTape() {
-            if (audioPlayer.src) {
-                audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
-            }
+            alert("Maju cepat pita kaset... (FAST FORWARD)");
         }
 
-        // Modal Controls
+        // Modal Handlers & Konten Nostalgia Publik
         function openMedia(type) {
             const modal = document.getElementById('modal-view');
             const title = document.getElementById('modal-title');
             const sub = document.getElementById('modal-sub');
             const text = document.getElementById('modal-text');
 
-            if (type === 'hai') {
-                title.innerText = "MAJALAH HAI - EDISI 1997";
-                sub.innerText = "Kebangkitan Musik Alternatif & Subkultur";
-                text.innerText = `DOKUMENTASI ARSIP:\n"Anak-anak muda Jakarta dan Bandung mulai meninggalkan musik pop arus utama. Kaset-kaset pita rilis mandiri (DIY) dari band seperti PAS Band, Netral, dan Pure Saturday habis terjual di distro-distro kecil."`;
-            } else if (type === 'petruk') {
-                title.innerText = "KOMIK TATANG S. - PETRUK GARENG";
-                sub.innerText = "Judul: TUMBAL SERAM DI DESA TUMARITIS";
-                text.innerText = `Petruk: "Gareng! Lu jangan jalan sendirian di deket kuburan tua malam Jumat begini!"\nGareng: "Ah lu Truk, nakut-nakutin aja! Yang penting gue bawa senter baterai ABC!"`;
-            } else if (type === 'fantasi') {
-                title.innerText = "TABLOID FANTASI (1998)";
-                sub.innerText = "Panduan Acara TV Minggu Pagi";
-                text.innerText = `JADWAL TV MINGGU PAGI:\n06.00 WIB - Saint Seiya (RCTI)\n07.00 WIB - Doraemon (RCTI)\n08.00 WIB - Dragon Ball Z (Indosiar)`;
-            } else if (type === 'tamiya') {
-                title.innerText = "KATALOG TAMIYA MINI 4WD (1998)";
-                sub.innerText = "Chassis Super-1 & Dinamo Tune-Up";
-                text.innerText = `SERI IKONIK:\n1. Magnum Saber\n2. Sonic Saber\n3. Spin Cobra`;
+            if (type === 'zinetext') {
+                title.innerText = "CATATAN KULTUR: DEMO TAPE & BARTER KASET";
+                sub.innerText = "Arsip Independen 1995-1998";
+                text.innerText = `Di pertengahan tahun 90-an, anak-anak muda mengandalkan kaset pita fisik untuk saling bertukar musik buatan sendiri. Kaset pitanya ditulis tangan dengan spidol, dihiasi foto cetak ulang di mesin fotokopi, lalu dikirim via Pos Indonesia ke berbagai kota. Sebuah bentuk interaksi fisik yang sangat personal sebelum era internet meluas.`;
+            } else if (type === 'jajanan') {
+                title.innerText = "JAJANAN LOKAL SD TAHUN 90-AN";
+                sub.innerText = "Koleksi Kenangan Kantin Sekolah";
+                text.innerText = `1. Anak Mas - Mie kremes bumbu gurih berhadiah stiker.
+2. Cokelat Jago - Cokelat batang tipis berbungkus kertas bergambar ayam jago.
+3. Chiki Balls - Camilan rasa keju/cokelat yang berhadiah Tazos kartun.
+4. Es Bon-Bon & Es Lilin - Minuman segar dalam plastik gulung.`;
+            } else if (type === 'tvri') {
+                title.innerText = "JADWAL LAYAR KACA MINGGU PAGI (1996)";
+                sub.innerText = "Tradisi Anak 90-an di Depan TV Tabung";
+                text.innerText = `06.30 WIB - Acara Serial Kartun Pagi
+08.00 WIB - Acara Boneka & Lagu Anak-Anak
+09.30 WIB - Drama Keluarga Seri Sore
+11.00 WIB - Acara Musik & Tangga Lagu Populer`;
+            } else if (type === 'tamagotchi') {
+                title.innerText = "TREND TAMAGOTCHI & GIGA PET (1997)";
+                sub.innerText = "Awal Gelombang Mainan Digital Saku";
+                text.innerText = `Gantungan kunci berbentuk telur dengan layar monokrom menjadi barang wajib di saku celana sekolah. Setiap beberapa jam sekali, bunyi 'bip-bip' khas menandakan bahwa hewan digital di dalamnya perlu diberi makan atau dibersihkan.`;
             }
             modal.style.display = 'flex';
         }
 
         function openPosterDetail() {
             const modal = document.getElementById('modal-view');
-            document.getElementById('modal-title').innerText = "POSTER KONSER 1996";
-            document.getElementById('modal-sub').innerText = "Memori Dinding Kamar Remaja";
-            document.getElementById('modal-text').innerText = "Poster konser legendaris Slank & Ramones tahun 1996 di Stadion Utama.";
+            document.getElementById('modal-title').innerText = "POSTER FESTIVAL MUSIK INDIE '96";
+            document.getElementById('modal-sub').innerText = "Karya Seni DIY Fanzine";
+            document.getElementById('modal-text').innerText = "Desain poster ini dibuat dengan gaya kolase manual fotokopi khas era 90-an. Tanpa elemen komersial berhak cipta, poster ini menggambarkan semangat berkumpulnya komunitas seni dan anak muda zaman dulu.";
             modal.style.display = 'flex';
         }
 
@@ -901,11 +912,20 @@
         }
 
         function randomizeTime() {
-            const years = [1992, 1995, 1997, 1998, 1999];
+            const years = [1991, 1993, 1995, 1997, 1999];
             const randomYear = years[Math.floor(Math.random() * years.length)];
-            document.getElementById('clock-display').innerText = `MINGGU, 12 MEI ${randomYear} - 08:30 WIB`;
+            document.getElementById('clock-display').innerText = `MINGGU, 17 NOVEMBER ${randomYear} - 09:00 WIB`;
             alert("Mesin Waktu berpindah ke tahun " + randomYear + "!");
         }
+
+        // VCR Timer Clock
+        setInterval(() => {
+            const now = new Date();
+            const secs = String(now.getSeconds()).padStart(2, '0');
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            const hrs = String(now.getHours()).padStart(2, '0');
+            document.getElementById('vcr-timer').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
     </script>
 </body>
 </html>
